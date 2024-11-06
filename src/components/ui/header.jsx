@@ -6,7 +6,7 @@ export default function Component() {
   return (
     <div className="container px-4 mx-auto md:px-6 lg:px-8">
       <header className="flex items-center w-full h-20 px-4 shrink-0 md:px-6">
-        <Link href="#" className="hiddenmr-6 lg:flex" prefetch={false}>
+        <Link href="/" className="hiddenmr-6 lg:flex" prefetch={false}>
           <div className="flex items-center gap-4">
             <F1Icon className="w-20 h-20" />
             <Separator orientation="vertical" className="h-4/5" />
@@ -36,13 +36,14 @@ export default function Component() {
             Votaciones
           </Link>
           <Button
+            asChild
             variant="outline"
             className="px-2 py-1 text-xs justify-self-end"
           >
-            Sign in
+            <Link href="/auth/signin">Iniciar Sesión</Link>
           </Button>
-          <Button className="px-2 py-1 text-xs justify-self-end">
-            Sign Up
+          <Button asChild className="px-2 py-1 text-xs justify-self-end">
+            <Link href="/auth/signup">Regístrate</Link>
           </Button>
         </div>
       </header>

@@ -1,15 +1,15 @@
 import localFont from 'next/font/local';
-import './globals.css';
+import '../globals.css';
 
 import Header from '@/components/ui/header';
 
 const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
+  src: '../fonts/GeistVF.woff',
   variable: '--font-geist-sans',
   weight: '100 900',
 });
 const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
+  src: '../fonts/GeistMonoVF.woff',
   variable: '--font-geist-mono',
   weight: '100 900',
 });
@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-        <div className="grid grid-rows-[20px_1fr_20px]  min-h-screen p-6 pb-20  sm:px-16 font-[family-name:var(--font-geist-sans)]">
+        <div className="grid grid-rows-[20px_1fr_20px]  min-h-screen pb-20  font-[family-name:var(--font-geist-sans)]">
           <main className="flex flex-col items-center row-start-2 gap-8 sm:items-start">
             {children}
           </main>
