@@ -5,5 +5,5 @@ export interface IPiloto extends IModel {
     nombre: string
     apellidos: string
     siglas: string
-    dorsal: number
+    dorsal: string
 }
