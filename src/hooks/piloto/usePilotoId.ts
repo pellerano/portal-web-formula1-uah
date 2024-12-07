@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useRef } from 'react';
+import UtilInstance from '@/helpers/Util'
+import { redirect } from 'next/navigation'
 
 const formSchema = z.object({
     nombre: z
@@ -22,9 +25,19 @@ const formSchema = z.object({
       .string()
       .min(1, { message: 'Este campo debe ser completado.' })
       .max(3),
+    pais: z
+      .string()
+      .min(1, { message: 'Este campo debe ser completado.' })
+      .max(50),
+    twitter: z
+      .string()
+      .min(1, { message: 'Este campo debe ser completado.' })
+      .max(50),
 })
 
 const usePilotoId = (eId: Number) => {
+    const inputFoto = useRef(null);
+    const [urlFotoB64, setUrlFotoB64] = useState("")
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: { 
@@ -32,7 +45,10 @@ const usePilotoId = (eId: Number) => {
             nombre: '',
             apellidos: '',
             siglas: '',
-            dorsal: '' },
+            dorsal: '',
+            pais: '',
+            twitter: ''  
+        },
     })
 
     useEffect(() => {
@@ -47,15 +63,38 @@ const usePilotoId = (eId: Number) => {
                 form.setValue('apellidos', _data.apellidos)
                 form.setValue('siglas', _data.siglas)
                 form.setValue('dorsal', _data.dorsal.toString())
+                form.setValue('pais', _data.pais)
+                form.setValue('twitter', _data.twitter)
+                setUrlFotoB64(_data.dataurlb64 || "")
             }
         }).catch(err => { }).finally(() => { })
     }, [eId])
 
-    const handleSave = () => {
-        console.log("guardar")
+    const handleSave = async (e) => {
+        let dataurlb64: String = ""
+        try{
+            dataurlb64 = await UtilInstance.FileToUrlBase64(inputFoto.current.files[0])
+        }catch(e){}
+
+        const result = await (eId ?
+            FetchApiServiceInstance.update(`http://localhost:8087/portalWebFormula1/pilotos`, 
+                { ...form.getValues(), dataurlb64 }, (err) => {
+                    console.log("error custom")
+            }).then(data => {
+                console.log("update -> ", data)
+            }).catch(err => { }).finally(() => { }) 
+            :
+            FetchApiServiceInstance.create(`http://localhost:8087/portalWebFormula1/pilotos`, 
+                { ...form.getValues(), dataurlb64 }, (err) => {
+                    console.log("error custom")
+            }).then(data => {
+                console.log("create -> ", data)
+            }).catch(err => { }).finally(() => { })
+        )
+        window.location.href="/pilotos"
     }
 
-    return { form, handleSave }
+    return { form, handleSave, inputFoto, urlFotoB64 }
 }
 
 export default usePilotoId
