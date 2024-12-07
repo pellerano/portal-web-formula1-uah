@@ -6,4 +6,7 @@ export interface IPiloto extends IModel {
     apellidos: string
     siglas: string
     dorsal: string
+    pais: string
+    twitter: string
+    dataurlb64: string
 }
