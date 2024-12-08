@@ -8,9 +8,9 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 
-export default function PilotoCard({ title, description, href, dataFotoB64, siglas, dorsal, pais }) {
+export default function PilotoCard({ title, description, href, dataFotoB64, siglas, dorsal, pais, estado }) {
   return (
-    <Card>
+    <Card className={ estado == "0" ?"border-red-500":"" }>
       <CardHeader>
         <div className='flex'>
           <div className='mr-4'>
@@ -21,20 +21,18 @@ export default function PilotoCard({ title, description, href, dataFotoB64, sigl
               <CardTitle>{title}</CardTitle>
             </Link>
             <CardDescription>
-              <p><span className='font-bold text-gray-600'>Siglas: </span>{siglas}</p>
-              <p><span className='font-bold text-gray-600'>Dorsal: </span>{dorsal}</p>
-              <p><span className='font-bold text-gray-600'>País: </span>{pais}</p>
+              <span className='font-bold text-gray-600'>Siglas: </span>{siglas}
+            </CardDescription>
+            <CardDescription>
+              <span className='font-bold text-gray-600'>Dorsal: </span>{dorsal}
+            </CardDescription>
+            <CardDescription>
+              <span className='font-bold text-gray-600'>País: </span>{pais}
             </CardDescription>
           </div>
         </div>
         
       </CardHeader>
-      {/* <CardContent>
-        <p>Card Content</p>
-      </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter> */}
     </Card>
   );
 }

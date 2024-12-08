@@ -12,6 +12,13 @@ class ConstantsUtil {
             { value: "Inglaterra", text:"Inglaterra"},
         ]
     }
+
+    getEstados() {
+        return [
+            { value: "1", text:"Alta"},
+            { value: "0", text:"Baja"},
+        ]
+    }
 }
 
 const ConstantsUtilInstance = new ConstantsUtil()

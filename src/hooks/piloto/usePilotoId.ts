@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRef } from 'react';
 import UtilInstance from '@/helpers/Util'
-import { redirect } from 'next/navigation'
+import { AppWindow } from 'lucide-react'
 
 const formSchema = z.object({
     nombre: z
@@ -33,6 +33,10 @@ const formSchema = z.object({
       .string()
       .min(1, { message: 'Este campo debe ser completado.' })
       .max(50),
+    estado: z
+      .string()
+      .min(1, { message: 'Este campo debe ser completado.' })
+      .max(1),
 })
 
 const usePilotoId = (eId: Number) => {
@@ -47,7 +51,8 @@ const usePilotoId = (eId: Number) => {
             siglas: '',
             dorsal: '',
             pais: '',
-            twitter: ''  
+            twitter: '',
+            estado: '',  
         },
     })
 
@@ -66,6 +71,7 @@ const usePilotoId = (eId: Number) => {
                 form.setValue('pais', _data.pais)
                 form.setValue('twitter', _data.twitter)
                 setUrlFotoB64(_data.dataurlb64 || "")
+                form.setValue('estado', _data.estado.toString())
             }
         }).catch(err => { }).finally(() => { })
     }, [eId])
@@ -94,7 +100,14 @@ const usePilotoId = (eId: Number) => {
         window.location.href="/pilotos"
     }
 
-    return { form, handleSave, inputFoto, urlFotoB64 }
+    const getSigla = async () => {
+        const { apellidos } = form.getValues()
+        if (apellidos.trim() !== "") {
+            form.setValue("siglas", apellidos.substring(0,3).toUpperCase())
+        } else form.setValue("siglas", "")
+    }
+
+    return { form, handleSave, inputFoto, urlFotoB64, getSigla }
 }
 
 export default usePilotoId

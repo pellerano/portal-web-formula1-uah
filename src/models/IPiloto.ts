@@ -9,4 +9,5 @@ export interface IPiloto extends IModel {
     pais: string
     twitter: string
     dataurlb64: string
+    estado: number
 }
