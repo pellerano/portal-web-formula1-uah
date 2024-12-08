@@ -18,7 +18,7 @@ import ConstantsUtilInstance from "@/helpers/ConstansUtil"
 
 const PilotoId = ({params}) => {
     const {
-        form, handleSave, inputFoto, urlFotoB64
+        form, handleSave, inputFoto, urlFotoB64, getSigla
     } = usePilotoId( isNaN(parseInt(`${params.id}`)) ? 0 : parseInt(params.id) )
     
     return (
@@ -38,7 +38,7 @@ const PilotoId = ({params}) => {
                     <FormItem>
                       <FormLabel className="text-black">Nombres</FormLabel>
                       <FormControl>
-                        <Input className="bg-white" {...field} />
+                        <Input {...field} className="bg-white" />
                       </FormControl>
                       <FormMessage className="font-light text-red-600" />
                     </FormItem>
@@ -53,7 +53,10 @@ const PilotoId = ({params}) => {
                         Apellidos
                       </FormLabel>
                       <FormControl>
-                        <Input className="bg-white" {...field} />
+                        <Input {...field} onChange={(e) =>{
+                          field.onChange(e)
+                          getSigla()
+                        }} className="bg-white" />
                       </FormControl>
                       <FormMessage className="font-light text-red-600" />
                     </FormItem>
@@ -68,7 +71,11 @@ const PilotoId = ({params}) => {
                         Siglas
                       </FormLabel>
                       <FormControl>
-                        <Input className="bg-white" {...field} />
+                        <Input className="bg-white" {...field} onChange={(e) =>{
+                          field.onChange(e)
+                          const { siglas } = form.getValues()
+                          if(siglas.trim() !== ""){form.setValue("siglas", siglas.toUpperCase())}
+                        }} />
                       </FormControl>
                       <FormMessage className="font-light text-red-600" />
                     </FormItem>
@@ -99,6 +106,21 @@ const PilotoId = ({params}) => {
                       </FormLabel>
                       <FormControl>
                         <Select className="bg-white" {...field} name="pais" options={ConstantsUtilInstance.getPaises()} />
+                      </FormControl>
+                      <FormMessage className="font-light text-red-600" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="estado"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-black">
+                      Estado
+                      </FormLabel>
+                      <FormControl>
+                        <Select className="bg-white" {...field} name="estado" options={ConstantsUtilInstance.getEstados()} />
                       </FormControl>
                       <FormMessage className="font-light text-red-600" />
                     </FormItem>

@@ -15,7 +15,7 @@ const Piloto = () => {
         <div className='text-end py-4'>
           <Button variant='default'><Link href="/pilotos/nuevo">Nuevo</Link></Button>
         </div>
-        {listData.map(({ id, nombre, apellidos, siglas, dorsal, pais, dataurlb64 }, i) => (
+        {listData.map(({ id, nombre, apellidos, siglas, dorsal, pais, dataurlb64, estado }, i) => (
           <div className="mb-6" key={i}>
             <PilotoCard
               key={i}
@@ -26,6 +26,7 @@ const Piloto = () => {
               siglas={siglas} 
               dorsal={dorsal} 
               pais={pais}
+              estado={estado}
             />
           </div>
         ))}
