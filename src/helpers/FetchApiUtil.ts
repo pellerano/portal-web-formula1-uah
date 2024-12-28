@@ -16,7 +16,22 @@ class FetchApiUtil {
 
     async getById(path: string, handleError?: (error: {}) => void): Promise<IModel | undefined> {
         try {
-            let _result = await fetch(`${path}`)
+            let token = await FetchApiServiceInstance.getToken()
+            console.log({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token!=null?token:''}`
+              })
+            let _result = await fetch(`${path}`,
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token!=null?token:''}`
+                      },
+                      method: "GET"
+                }
+            )
             if (!_result) return undefined
             let _data = (await _result.json()) as IModel
             return _data
@@ -64,6 +79,31 @@ class FetchApiUtil {
             return _data
         } catch (err) {
             handleError && handleError(err)
+            console.log('Error al retornar datos DB!')
+        }
+        return undefined
+    }
+
+    async getToken(): Promise<String | undefined> {
+        // Temporal para probar la parte de equipo
+        try {
+            let _result = await fetch(`http://localhost:8087/api/auth/login`, 
+            {
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    "username": "Equipo",
+                    "password": "Equipo"
+                })
+            })
+            console.log("ddd", _result)
+            if (!_result) return undefined
+            let _data = (await _result.json())
+            return _data.accessToken
+        } catch (err) {
             console.log('Error al retornar datos DB!')
         }
         return undefined
