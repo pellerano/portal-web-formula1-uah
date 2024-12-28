@@ -100,7 +100,7 @@ export const columns = (handleEdit, handleDelete) => [
             <AlertDialogHeader>
               <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
               <AlertDialogDescription>
-                Esta acción no se puede deshacer. Esto eliminará permanentemente la noticia.
+                Esta acción no se puede deshacer. Esto eliminará permanentemente la noticia con el ID: {row.original.id}.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
