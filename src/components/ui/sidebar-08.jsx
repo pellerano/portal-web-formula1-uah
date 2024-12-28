@@ -89,6 +89,11 @@ const data = {
       url: '/panel/polls',
       icon: BookOpen,
     },
+    {
+      title: 'Mi equipo',
+      url: '/panel/myteam',
+      icon: BookOpen,
+    },
   ],
   navSecondary: [],
 };
