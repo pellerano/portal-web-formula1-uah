@@ -39,6 +39,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { useEffect } from "react";
 
 export const columns = (handleEdit, handleDelete) => [
   {
@@ -79,6 +92,16 @@ export const columns = (handleEdit, handleDelete) => [
     cell: ({ row }) => <div>{row.getValue("texto")}</div>,
   },
   {
+    accessorKey: "permalink",
+    header: "Permalink",
+    cell: ({ row }) => <div>{row.getValue("permalink")}</div>,
+  },
+  {
+    accessorKey: "imagen",
+    header: "Imagen",
+    cell: ({ row }) => <div>{row.getValue("imagen")}</div>,
+  },
+  {
     id: "acciones",
     header: "Acciones",
     cell: ({ row }) => (
@@ -117,15 +140,27 @@ export const columns = (handleEdit, handleDelete) => [
 ];
 
 export function NewsTable({ data }) {
-  const [news, setNews] = React.useState(data);
-  const [sorting, setSorting] = React.useState([]);
-  const [columnFilters, setColumnFilters] = React.useState([]);
-  const [columnVisibility, setColumnVisibility] = React.useState({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [news, setNews] = useState(data);
+  const [sorting, setSorting] = useState([]);
+  const [columnFilters, setColumnFilters] = useState([]);
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [rowSelection, setRowSelection] = useState({});
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [titulo, setTitulo] = useState(news.find((n) => n.id === editId)?.titulo || '');
+  const [texto, setTexto] = useState(news.find((n) => n.id === editId)?.texto || '');
+
+  useEffect(() => {
+    const newItem = news.find((n) => n.id === editId);
+    if (newItem) {
+      setTitulo(newItem.titulo);
+      setTexto(newItem.texto);
+    }
+  }, [editId]);
 
   const handleEdit = (id) => {
-    // Lógica para editar la noticia con el id proporcionado
-    console.log(`Editar noticia con id: ${id}`);
+    setEditId(id);
+    setIsSheetOpen(true);
   };
 
   const handleDelete = async (id) => {
@@ -136,12 +171,44 @@ export function NewsTable({ data }) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      // Actualiza el estado de las noticias después de eliminar una noticia
       setNews((prevNews) => prevNews.filter((news) => news.id !== id));
     } catch (error) {
       console.error('Error al eliminar la noticia:', error);
     }
   };
+
+  const handleSaveChanges = async () => {
+    const updatedNews = {
+      id: editId,
+      date: news.find((n) => n.id === editId)?.date,
+      permalink: news.find((n) => n.id === editId)?.permalink,
+      imagen: news.find((n) => n.id === editId)?.imagen,
+      titulo,
+      texto,
+    };
+
+    console.log(updatedNews);
+
+    try {
+      const response = await fetch(`http://localhost:8087/portalWebFormula1/noticias/${editId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedNews),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setNews((prevNews) => prevNews.map((news) => news.id === editId ? updatedNews : news));
+      setIsSheetOpen(false);
+    } catch (error) {
+      console.error('Error al guardar los cambios:', error);
+    }
+  };
+
 
   const table = useReactTable({
     data: news,
@@ -274,6 +341,58 @@ export function NewsTable({ data }) {
           </Button>
         </div>
       </div>
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+        <SheetContent side="top">
+          <SheetHeader>
+            <SheetTitle>Editar Noticia</SheetTitle>
+            <SheetDescription>
+              Edita la noticia con el ID: {editId}
+            </SheetDescription>
+          </SheetHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="id" className="text-right">
+                  ID
+                </Label>
+                <Input id="id" defaultValue={news.find((n) => n.id === editId)?.id} className="col-span-3 bg-gray-200" readOnly />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="date" className="text-right">
+                  Fecha
+                </Label>
+                <Input id="date" defaultValue={news.find((n) => n.id === editId)?.date} className="col-span-3 bg-gray-200" readOnly />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="permalink" className="text-right">
+                Permalink
+              </Label>
+              <Input id="permalink" defaultValue={news.find((n) => n.id === editId)?.permalink} className="col-span-3 bg-gray-200" readOnly />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="titulo" className="text-right">
+                Titulo
+              </Label>
+              <Input id="titulo" defaultValue={news.find((n) => n.id === editId)?.titulo} className="col-span-3" onChange={(event) => setTitulo(event.target.value)} />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="texto" className="text-right">
+                Descripcion
+              </Label>
+              <textarea
+                id="texto"
+                defaultValue={news.find((n) => n.id === editId)?.texto}
+                onChange={(event) => setTexto(event.target.value)}
+                className="col-span-3 border rounded p-2 h-64 w-full"
+              />
+            </div>
+          </div>
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button type="submit" onClick={handleSaveChanges}>Guardar cambios</Button>
+            </SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
