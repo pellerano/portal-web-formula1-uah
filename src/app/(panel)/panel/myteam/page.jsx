@@ -17,8 +17,8 @@ import { useContext, useEffect } from 'react';
 const PanelMyTeamPage = ({params}) => {
     const { setBreadcrumbs } = useContext(Sidebar8Context);
     const {
-        form, handleSave, inputFoto, urlFotoB64, getSigla
-    } = useMyTeam(1)
+        form, handleSave, inputFoto, urlFotoB64, goTwitter
+    } = useMyTeam(0)
 
     useEffect(() => {
         setBreadcrumbs(['Mi equipo']);
@@ -55,7 +55,13 @@ const PanelMyTeamPage = ({params}) => {
                       Twitter
                       </FormLabel>
                       <FormControl>
-                        <Input className="bg-white" {...field} />
+                        <div className="flex rounded-lg shadow-sm">
+                          <div className="px-4 inline-flex items-center min-w-fit rounded-s-md border border-e-0 border-gray-200 bg-gray-50 dark:bg-neutral-700 dark:border-neutral-600">
+                            <span className="text-sm text-gray-500 dark:text-neutral-400">@</span>
+                          </div>
+                          <Input className="bg-white shadow-sm rounded-r-none rounded-l-none" {...field} />
+                          <Button onClick={goTwitter} type="button" variant="link" className="bg-blue-600 text-white rounded-l-none">Ir</Button>
+                        </div>
                       </FormControl>
                       <FormMessage className="font-light text-red-600" />
                     </FormItem>
