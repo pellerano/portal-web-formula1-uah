@@ -17,19 +17,14 @@ class FetchApiUtil {
     async getById(path: string, handleError?: (error: {}) => void): Promise<IModel | undefined> {
         try {
             let token = await FetchApiServiceInstance.getToken()
-            console.log({
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token!=null?token:''}`
-              })
             let _result = await fetch(`${path}`,
                 {
                     headers: {
-                        'Accept': 'application/json',
+                        Accept: 'application/json',
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token!=null?token:''}`
+                        Authorization: `Bearer ${token!=null? token : ''}`,
                       },
-                      method: "GET"
+                      method:"GET",
                 }
             )
             if (!_result) return undefined
@@ -44,11 +39,13 @@ class FetchApiUtil {
 
     async create(path: string, data: IModel, handleError?: (error: {}) => void): Promise<IModel | undefined> {
         try {
+            let token = await FetchApiServiceInstance.getToken()
             let _result = await fetch(`${path}`, 
             {
                 headers: {
                   'Accept': 'application/json',
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token!=null? token : ''}`,
                 },
                 method: "POST",
                 body: JSON.stringify(data)
@@ -65,11 +62,13 @@ class FetchApiUtil {
 
     async update(path: string, data: IModel, handleError?: (error: {}) => void): Promise<IModel | undefined> {
         try {
+            let token = await FetchApiServiceInstance.getToken()
             let _result = await fetch(`${path}`, 
             {
                 headers: {
                   'Accept': 'application/json',
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token!=null? token : ''}`,
                 },
                 method: "PUT",
                 body: JSON.stringify(data)
@@ -99,7 +98,6 @@ class FetchApiUtil {
                     "password": "Equipo"
                 })
             })
-            console.log("ddd", _result)
             if (!_result) return undefined
             let _data = (await _result.json())
             return _data.accessToken
