@@ -50,7 +50,7 @@ export default function PanelCircuits() {
 				open={open}
 				setOpen={setOpen}
 			/>
-	      <table>
+	      <table style={{borderSpacing: '17px 0px', borderCollapse: 'separate'}}>
 	        <thead>
 	          <tr>
 	            <th>ID</th>
