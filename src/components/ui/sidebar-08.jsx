@@ -94,6 +94,11 @@ const data = {
       url: '/panel/myteam',
       icon: BookOpen,
     },
+    {
+      title: 'Gestión de circuitos',
+      url: '/panel/circuits',
+      icon: BookOpen,
+    },
   ],
   navSecondary: [],
 };

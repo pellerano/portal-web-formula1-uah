@@ -22,28 +22,16 @@ export default function PanelCircuits() {
     setBreadcrumbs(['Gestión de Circuitos']);
   }, []);
 
-  /*useEffect(() => {
-    setOpen(open);
-  }, [open]);*/
-
-  const funcionOpenDialog = () => {    
-	setOpen(true);
-  };
-
   const funcionCloseDialog = () => {    
 	setOpen(false);
-	console.log("XXXX");
-	console.log(open);
   };
 
   const funcionOpenLoading = ()=>{
 	setOpenLoading(true);
-	//console.log("CLICK ME");
   }
 
   const funcionCloseLoading = ()=>{
 	setOpenLoading(false);
-	//console.log("CLICK ME FALSE");
   }
 
   return (
