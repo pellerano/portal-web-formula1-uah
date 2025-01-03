@@ -41,6 +41,10 @@ export default function NewsListPage() {
   };
 
   const handleSaveNews = async () => {
+    // if (!permalink || !titulo || !texto) {
+    //   alert('Todos los campos son requeridos');
+    //   return;
+    // }
     const createNews = {
       permalink,      
       titulo,
