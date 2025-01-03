@@ -8,6 +8,7 @@ import {
   LifeBuoy,
   Map,
   PieChart,
+  Send,
   Settings2,
   SquareTerminal,
 } from "lucide-react"
