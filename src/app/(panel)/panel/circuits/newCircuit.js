@@ -305,6 +305,30 @@ export default function NewCircuits({
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="fecha"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-black">
+                      Fecha
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                        	type="date"
+	                      	className="bg-white" 
+	                      	{...field} 
+	                      	{...form.register("fecha", {
+                              required: "Este campo es obligatorio",
+                          })}
+	                      	onChange={(e) =>{ field.onChange(e)}} 
+                        />
+                      </FormControl>
+                      <FormMessage className="font-light text-red-600">
+		              </FormMessage>
+                    </FormItem>
+                  )}
+                />
                 <Button type="submit">Guardar</Button>
               </form>
             </Form>

@@ -53,7 +53,7 @@ export default function PanelCircuits() {
 	      <table style={{borderSpacing: '17px 0px', borderCollapse: 'separate'}}>
 	        <thead>
 	          <tr>
-	            <th>ID</th>
+				<th>fecha</th>
 	            <th>Nombre</th>
 	            <th>ciudad</th>
 	            <th>País</th>
@@ -69,6 +69,7 @@ export default function PanelCircuits() {
 	        <tbody>
 	          {listData.map((row) => (
 	           <tr key={row.Id}>
+				  <td>{row.fecha}</td>
 	              <td>{row.nombre}</td>
 	              <td>{row.ciudad}</td>
 	              <td>{row.pais}</td>

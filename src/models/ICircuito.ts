@@ -11,5 +11,6 @@ export interface ICircuito extends IModel {
 	curvasLentas: number;
 	curvasMedia: number;
 	curvasRapidas:number;
+	fecha:Date;
 	
 }
