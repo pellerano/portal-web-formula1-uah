@@ -4,8 +4,7 @@ import { React, useContext, useEffect, useState } from 'react';
 import useCircuito from "@/hooks/circuito/useCircuito"
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { FaTrash } from 'react-icons/fa'; // Importamos el ícono de la papelera
-import { FaSync } from 'react-icons/fa'; // Importamos el ícono de actualizar
+import { TrashIcon, UpdateIcon } from '@radix-ui/react-icons'; 
 import NewsDialog from '@/components/ui/news-dialog';
 import NewCircuits from './newCircuit';
 import NewLoading from '@/components/ui/new-loading';
@@ -81,13 +80,13 @@ export default function PanelCircuits() {
 	              <td>
           			<Button variant='default'>
           				<Link href={`/circuits/${row.Id}`}>
-          				<FaTrash style={{ marginRight: '8px' }} />
+          				<TrashIcon style={{ marginRight: '8px' }} />
           				</Link>
           			</Button>
 				  </td>
 	              <td>
           			<Button variant='default'>
-          				<FaSync style={{ marginRight: '8px' }} />
+          				<UpdateIcon style={{ marginRight: '8px' }} />
           			</Button>
 	              </td>
 	            </tr>
