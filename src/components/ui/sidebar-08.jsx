@@ -206,15 +206,15 @@ export default function AppSidebar({ children }) {
                     <Avatar className="w-8 h-8 rounded-lg">
                       <AvatarImage
                         src={data.user.avatar}
-                        alt={data.user.name}
+                        alt={data.user?.name}
                       />
                       <AvatarFallback className="rounded-lg">
-                        {user.name[0].toUpperCase()}
+                        {user?.name[0].toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-sm leading-tight text-left">
                       <span className="font-semibold truncate">
-                        {user.name}
+                        {user?.name}
                       </span>
                       <span className="text-xs truncate">{user.email}</span>
                     </div>
