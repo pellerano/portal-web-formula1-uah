@@ -18,17 +18,20 @@ export const metadata = {
 
 import { SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/ui/sidebar-08';
+import Providers from '@/provider';
 
 export default function Layout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <SidebarProvider>
-          <AppSidebar>{children}</AppSidebar>
-        </SidebarProvider>
-      </body>
-    </html>
+    <Providers>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <SidebarProvider>
+            <AppSidebar>{children}</AppSidebar>
+          </SidebarProvider>
+        </body>
+      </html>
+    </Providers>
   );
 }

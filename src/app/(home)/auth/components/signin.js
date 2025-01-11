@@ -11,29 +11,68 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
-  email: z.string().email('Este no es un correo electrónico válido.'),
+  username: z.string(),
   password: z.string(),
 });
 
 export default function SignIn() {
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const signIn = useSignIn();
+  const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
     },
   });
 
-  function onSubmit(values) {
-    console.log(values);
+  async function onSubmit(values) {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify(values),
+        }
+      )
+        .then((r) =>
+          r.json().then((data) => ({ status: r.status, body: data }))
+        )
+        .then((obj) => obj);
+      if (res.status != 200) throw new Error(res.code);
+      signIn({
+        auth: {
+          token: res.body.accessToken,
+        },
+        userState: {
+          name: res.body.user.nombre,
+          username: res.body.user.username,
+          email: res.body.user.email,
+          role: res.body.user.roles[0],
+        },
+      });
+      router.push('/panel');
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
   }
 
   return (
@@ -46,12 +85,12 @@ export default function SignIn() {
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Correo Electrónico</FormLabel>
+                  <FormLabel>Nombre de Usuario</FormLabel>
                   <FormControl>
-                    <Input {...field} autoComplete="email" />
+                    <Input {...field} autoComplete="username" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -93,7 +132,8 @@ export default function SignIn() {
                 </FormItem>
               )}
             />
-            <Button className="mt-3" type="submit">
+            <Button disabled={loading} className="mt-3" type="submit">
+              {loading && <Loader2 className="animate-spin" />}
               Iniciar Sesión
             </Button>
           </form>
