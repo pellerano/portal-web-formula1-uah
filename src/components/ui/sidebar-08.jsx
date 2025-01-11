@@ -55,62 +55,58 @@ import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import { useRouter } from 'next/navigation';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
-const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
-  navMain: [
-    {
-      title: 'Gestión de Usuarios',
-      url: '/panel/users',
-      icon: SquareUserRound,
-      isActive: true,
-      items: [
-        {
-          title: 'Solicitudes',
-          url: '/panel/users',
-        },
-        {
-          title: 'Administradores',
-          url: '/panel/users/admins',
-        },
-        {
-          title: 'Lideres de Equipo',
-          url: '/panel/users/team-leads',
-        },
-      ],
-    },
-    {
-      title: 'Gestión de Noticias',
-      url: '/panel/news',
-      icon: Newspaper,
-    },
-    {
-      title: 'Gestión de Votaciones',
-      url: '/panel/polls',
-      icon: BookOpen,
-    },
-    {
-      title: 'Mi equipo',
-      url: '/panel/myteam',
-      icon: BookOpen,
-    },
-    {
-      title: 'Gestión de circuitos',
-      url: '/panel/circuits',
-      icon: BookOpen,
-    },
-  ],
-  navSecondary: [],
-};
-
 export default function AppSidebar({ children }) {
   const [breadcrumbs, setBreadcrumbs] = useState([]);
   const signOut = useSignOut();
   const router = useRouter();
   const user = useAuthUser();
+
+  const data = {
+    user,
+    navMain: [
+      {
+        title: 'Gestión de Usuarios',
+        url: '/panel/users',
+        icon: SquareUserRound,
+        isActive: true,
+        items: [
+          {
+            title: 'Solicitudes',
+            url: '/panel/users',
+          },
+          {
+            title: 'Administradores',
+            url: '/panel/users/admins',
+          },
+          {
+            title: 'Lideres de Equipo',
+            url: '/panel/users/team-leads',
+          },
+        ],
+      },
+      {
+        title: 'Gestión de Noticias',
+        url: '/panel/news',
+        icon: Newspaper,
+      },
+      {
+        title: 'Gestión de Votaciones',
+        url: '/panel/polls',
+        icon: BookOpen,
+      },
+      {
+        title: 'Mi equipo',
+        url: '/panel/myteam',
+        icon: BookOpen,
+      },
+      {
+        title: 'Gestión de circuitos',
+        url: '/panel/circuits',
+        icon: BookOpen,
+      },
+    ],
+    navSecondary: [],
+  };
 
   return (
     <SidebarProvider>
@@ -205,8 +201,8 @@ export default function AppSidebar({ children }) {
                   >
                     <Avatar className="w-8 h-8 rounded-lg">
                       <AvatarImage
-                        src={data.user.avatar}
-                        alt={data.user?.name}
+                        src={data?.user.avatar}
+                        alt={data?.user?.name}
                       />
                       <AvatarFallback className="rounded-lg">
                         {user?.name[0].toUpperCase()}
