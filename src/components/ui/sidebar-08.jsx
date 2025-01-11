@@ -212,7 +212,7 @@ export default function AppSidebar({ children }) {
                       <span className="font-semibold truncate">
                         {user?.name}
                       </span>
-                      <span className="text-xs truncate">{user.email}</span>
+                      <span className="text-xs truncate">{user?.email}</span>
                     </div>
                     <ChevronsUpDown className="ml-auto size-4" />
                   </SidebarMenuButton>
