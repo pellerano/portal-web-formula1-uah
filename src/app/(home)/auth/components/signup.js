@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -34,6 +34,15 @@ const formSchema = z
         message: 'Este campo tiene un máximo de 50 caracteres.',
       }),
     lastName: z
+      .string()
+      .min(2, {
+        message:
+          'Este campo tiene un mínimo de 2 caracteres y debe ser completado.',
+      })
+      .max(50, {
+        message: 'Este campo tiene un máximo de 50 caracteres.',
+      }),
+    username: z
       .string()
       .min(2, {
         message:
@@ -72,6 +81,7 @@ const formSchema = z
   });
 
 export default function SignUp() {
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -80,14 +90,35 @@ export default function SignUp() {
     defaultValues: {
       firstName: '',
       lastName: '',
+      username: '',
       email: '',
       password: '',
       confirmPassword: '',
     },
   });
 
-  function onSubmit(values) {
-    console.log(values);
+  async function onSubmit(values) {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            nombre: `${values.firstName} ${values.lastName}`,
+            ...values,
+          }),
+        }
+      );
+      if (res.status != 200) throw new Error(res.code);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   }
 
   return (
@@ -110,7 +141,7 @@ export default function SignUp() {
                 <FormItem>
                   <FormLabel>Nombre</FormLabel>
                   <FormControl>
-                    <Input {...field} autoComplete="first-name" />
+                    <Input {...field} autoComplete="firstName" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -124,6 +155,19 @@ export default function SignUp() {
                   <FormLabel>Apellido</FormLabel>
                   <FormControl>
                     <Input {...field} autoComplete="last-name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nombre de Usuario</FormLabel>
+                  <FormControl>
+                    <Input {...field} autoComplete="username" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -216,7 +260,8 @@ export default function SignUp() {
                 </FormItem>
               )}
             />
-            <Button className="mt-3" type="submit">
+            <Button disabled={loading} className="mt-3" type="submit">
+              {loading && <Loader2 className="animate-spin" />}
               Regístrate
             </Button>
           </form>

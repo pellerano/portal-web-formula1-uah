@@ -51,6 +51,9 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { createContext, Fragment, useState } from 'react';
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import { useRouter } from 'next/navigation';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 const data = {
   user: {
@@ -105,6 +108,10 @@ const data = {
 
 export default function AppSidebar({ children }) {
   const [breadcrumbs, setBreadcrumbs] = useState([]);
+  const signOut = useSignOut();
+  const router = useRouter();
+  const user = useAuthUser();
+
   return (
     <SidebarProvider>
       <Sidebar variant="inset">
@@ -201,15 +208,15 @@ export default function AppSidebar({ children }) {
                         src={data.user.avatar}
                         alt={data.user.name}
                       />
-                      <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                      <AvatarFallback className="rounded-lg">
+                        {user.name[0].toUpperCase()}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-sm leading-tight text-left">
                       <span className="font-semibold truncate">
-                        {data.user.name}
+                        {user.name}
                       </span>
-                      <span className="text-xs truncate">
-                        {data.user.email}
-                      </span>
+                      <span className="text-xs truncate">{user.email}</span>
                     </div>
                     <ChevronsUpDown className="ml-auto size-4" />
                   </SidebarMenuButton>
@@ -220,9 +227,14 @@ export default function AppSidebar({ children }) {
                   align="end"
                   sideOffset={4}
                 >
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      signOut();
+                      router.push('/auth/signin');
+                    }}
+                  >
                     <LogOut />
-                    Log out
+                    Cerrar Sesión
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
