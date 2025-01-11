@@ -201,7 +201,7 @@ export default function AppSidebar({ children }) {
                   >
                     <Avatar className="w-8 h-8 rounded-lg">
                       <AvatarImage
-                        src={data?.user.avatar}
+                        src={data?.user?.avatar}
                         alt={data?.user?.name}
                       />
                       <AvatarFallback className="rounded-lg">
