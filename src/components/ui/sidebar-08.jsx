@@ -69,20 +69,6 @@ export default function AppSidebar({ children }) {
         url: '/panel/users',
         icon: SquareUserRound,
         isActive: true,
-        items: [
-          {
-            title: 'Solicitudes',
-            url: '/panel/users',
-          },
-          {
-            title: 'Administradores',
-            url: '/panel/users/admins',
-          },
-          {
-            title: 'Lideres de Equipo',
-            url: '/panel/users/team-leads',
-          },
-        ],
       },
       {
         title: 'Gestión de Noticias',

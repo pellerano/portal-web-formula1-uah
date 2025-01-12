@@ -19,6 +19,7 @@ export const metadata = {
 import { SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/ui/sidebar-08';
 import Providers from '@/provider';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function Layout({ children }) {
   return (
@@ -28,6 +29,7 @@ export default function Layout({ children }) {
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <SidebarProvider>
+            <Toaster />
             <AppSidebar>{children}</AppSidebar>
           </SidebarProvider>
         </body>
