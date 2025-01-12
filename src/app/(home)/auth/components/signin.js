@@ -62,6 +62,7 @@ export default function SignIn() {
           token: res.body.accessToken,
         },
         userState: {
+          id: res.body.user.id,
           name: res.body.user.nombre,
           username: res.body.user.username,
           email: res.body.user.email,
