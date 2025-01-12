@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from "react";
+import * as React from 'react';
 import {
   flexRender,
   getCoreRowModel,
@@ -8,18 +8,18 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+} from '@tanstack/react-table';
+import { ChevronDown } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,7 +38,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 import {
   Sheet,
   SheetClose,
@@ -48,19 +48,19 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { useEffect } from "react";
+} from '@/components/ui/sheet';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 export const columns = (handleEdit, handleDelete) => [
   {
-    id: "select",
+    id: 'select',
     header: ({ table }) => (
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -77,33 +77,33 @@ export const columns = (handleEdit, handleDelete) => [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => <div>{row.getValue("id")}</div>,
+    accessorKey: 'id',
+    header: 'ID',
+    cell: ({ row }) => <div>{row.getValue('id')}</div>,
   },
   {
-    accessorKey: "titulo",
-    header: "Titulo",
-    cell: ({ row }) => <div>{row.getValue("titulo")}</div>,
+    accessorKey: 'titulo',
+    header: 'Titulo',
+    cell: ({ row }) => <div>{row.getValue('titulo')}</div>,
   },
   {
-    accessorKey: "texto",
-    header: "Descripcion",
-    cell: ({ row }) => <div>{row.getValue("texto")}</div>,
+    accessorKey: 'texto',
+    header: 'Descripcion',
+    cell: ({ row }) => <div>{row.getValue('texto')}</div>,
   },
   {
-    accessorKey: "permalink",
-    header: "Permalink",
-    cell: ({ row }) => <div>{row.getValue("permalink")}</div>,
+    accessorKey: 'permalink',
+    header: 'Permalink',
+    cell: ({ row }) => <div>{row.getValue('permalink')}</div>,
   },
   {
-    accessorKey: "imagen",
-    header: "Imagen",
-    cell: ({ row }) => <div>{row.getValue("imagen")}</div>,
+    accessorKey: 'imagen',
+    header: 'Imagen',
+    cell: ({ row }) => <div>{row.getValue('imagen')}</div>,
   },
   {
-    id: "acciones",
-    header: "Acciones",
+    id: 'acciones',
+    header: 'Acciones',
     cell: ({ row }) => (
       <div className="flex space-x-2">
         <Button
@@ -123,7 +123,8 @@ export const columns = (handleEdit, handleDelete) => [
             <AlertDialogHeader>
               <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
               <AlertDialogDescription>
-                Esta acción no se puede deshacer. Esto eliminará permanentemente la noticia con el ID: {row.original.id}.
+                Esta acción no se puede deshacer. Esto eliminará permanentemente
+                la noticia con el ID: {row.original.id}.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -147,8 +148,12 @@ export function NewsTable({ data }) {
   const [rowSelection, setRowSelection] = useState({});
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editId, setEditId] = useState(null);
-  const [titulo, setTitulo] = useState(news.find((n) => n.id === editId)?.titulo || '');
-  const [texto, setTexto] = useState(news.find((n) => n.id === editId)?.texto || '');
+  const [titulo, setTitulo] = useState(
+    news.find((n) => n.id === editId)?.titulo || ''
+  );
+  const [texto, setTexto] = useState(
+    news.find((n) => n.id === editId)?.texto || ''
+  );
 
   useEffect(() => {
     const newItem = news.find((n) => n.id === editId);
@@ -165,9 +170,12 @@ export function NewsTable({ data }) {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8087/portalWebFormula1/noticias/${id}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/noticias/${id}`,
+        {
+          method: 'DELETE',
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -190,25 +198,29 @@ export function NewsTable({ data }) {
     console.log(updatedNews);
 
     try {
-      const response = await fetch(`http://localhost:8087/portalWebFormula1/noticias/${editId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedNews),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/noticias/${editId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedNews),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      setNews((prevNews) => prevNews.map((news) => news.id === editId ? updatedNews : news));
+      setNews((prevNews) =>
+        prevNews.map((news) => (news.id === editId ? updatedNews : news))
+      );
       setIsSheetOpen(false);
     } catch (error) {
       console.error('Error al guardar los cambios:', error);
     }
   };
-
 
   const table = useReactTable({
     data: news,
@@ -234,9 +246,13 @@ export function NewsTable({ data }) {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter titles..."
-          value={typeof table.getColumn("titulo")?.getFilterValue() === "string" ? table.getColumn("title")?.getFilterValue() : ""}
+          value={
+            typeof table.getColumn('titulo')?.getFilterValue() === 'string'
+              ? table.getColumn('title')?.getFilterValue()
+              : ''
+          }
           onChange={(event) =>
-            table.getColumn("titulo")?.setFilterValue(event.target.value)
+            table.getColumn('titulo')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -249,7 +265,9 @@ export function NewsTable({ data }) {
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter((column) => column.getCanHide() && column.id !== "acciones")
+              .filter(
+                (column) => column.getCanHide() && column.id !== 'acciones'
+              )
               .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
@@ -267,7 +285,7 @@ export function NewsTable({ data }) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
+      <div className="border rounded-md">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -292,7 +310,7 @@ export function NewsTable({ data }) {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -317,9 +335,9 @@ export function NewsTable({ data }) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end py-4 space-x-2">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="space-x-2">
@@ -350,31 +368,51 @@ export function NewsTable({ data }) {
             </SheetDescription>
           </SheetHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="id" className="text-right">
-                  ID
-                </Label>
-                <Input id="id" defaultValue={news.find((n) => n.id === editId)?.id} className="col-span-3 bg-gray-200" readOnly />
+            <div className="grid items-center grid-cols-4 gap-4">
+              <Label htmlFor="id" className="text-right">
+                ID
+              </Label>
+              <Input
+                id="id"
+                defaultValue={news.find((n) => n.id === editId)?.id}
+                className="col-span-3 bg-gray-200"
+                readOnly
+              />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="date" className="text-right">
-                  Fecha
-                </Label>
-                <Input id="date" defaultValue={news.find((n) => n.id === editId)?.date} className="col-span-3 bg-gray-200" readOnly />
+            <div className="grid items-center grid-cols-4 gap-4">
+              <Label htmlFor="date" className="text-right">
+                Fecha
+              </Label>
+              <Input
+                id="date"
+                defaultValue={news.find((n) => n.id === editId)?.date}
+                className="col-span-3 bg-gray-200"
+                readOnly
+              />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid items-center grid-cols-4 gap-4">
               <Label htmlFor="permalink" className="text-right">
                 Permalink
               </Label>
-              <Input id="permalink" defaultValue={news.find((n) => n.id === editId)?.permalink} className="col-span-3 bg-gray-200" readOnly />
+              <Input
+                id="permalink"
+                defaultValue={news.find((n) => n.id === editId)?.permalink}
+                className="col-span-3 bg-gray-200"
+                readOnly
+              />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid items-center grid-cols-4 gap-4">
               <Label htmlFor="titulo" className="text-right">
                 Titulo
               </Label>
-              <Input id="titulo" defaultValue={news.find((n) => n.id === editId)?.titulo} className="col-span-3" onChange={(event) => setTitulo(event.target.value)} />
+              <Input
+                id="titulo"
+                defaultValue={news.find((n) => n.id === editId)?.titulo}
+                className="col-span-3"
+                onChange={(event) => setTitulo(event.target.value)}
+              />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid items-center grid-cols-4 gap-4">
               <Label htmlFor="texto" className="text-right">
                 Descripcion
               </Label>
@@ -382,13 +420,15 @@ export function NewsTable({ data }) {
                 id="texto"
                 defaultValue={news.find((n) => n.id === editId)?.texto}
                 onChange={(event) => setTexto(event.target.value)}
-                className="col-span-3 border rounded p-2 h-64 w-full"
+                className="w-full h-64 col-span-3 p-2 border rounded"
               />
             </div>
           </div>
           <SheetFooter>
             <SheetClose asChild>
-              <Button type="submit" onClick={handleSaveChanges}>Guardar cambios</Button>
+              <Button type="submit" onClick={handleSaveChanges}>
+                Guardar cambios
+              </Button>
             </SheetClose>
           </SheetFooter>
         </SheetContent>

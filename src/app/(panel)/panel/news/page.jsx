@@ -1,19 +1,27 @@
 'use client';
-import * as React from "react";
-import { NewsTable } from "@/components/ui/news-table";
+import * as React from 'react';
+import { NewsTable } from '@/components/ui/news-table';
 import { Sidebar8Context } from '@/components/ui/sidebar-08';
 import { useContext, useEffect, useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetClose } from "@/components/ui/sheet";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+  SheetClose,
+} from '@/components/ui/sheet';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 export default function NewsListPage() {
   const { setBreadcrumbs } = useContext(Sidebar8Context);
   useEffect(() => {
     setBreadcrumbs(['Gestion de Noticias']);
   }, []);
-  
+
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,9 +30,9 @@ export default function NewsListPage() {
   const [texto, setTexto] = useState('');
   const [permalink, setPermalink] = useState('');
   const [imagen, setImagen] = useState('');
-  const apiUrl = 'http://localhost:8087/portalWebFormula1/noticias';
+  const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/noticias`;
 
-  const fetchData = async () => {    
+  const fetchData = async () => {
     setLoading(true);
     try {
       const response = await fetch(apiUrl);
@@ -46,7 +54,7 @@ export default function NewsListPage() {
     //   return;
     // }
     const createNews = {
-      permalink,      
+      permalink,
       titulo,
       imagen: null,
       texto,
@@ -88,7 +96,7 @@ export default function NewsListPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+    <div className="flex flex-col flex-1 gap-4 p-4 pt-0">
       <div className="flex items-center justify-end">
         <Button onClick={() => setIsSheetOpen(true)}>Nueva Noticia</Button>
       </div>
@@ -108,32 +116,43 @@ export default function NewsListPage() {
             </SheetDescription>
           </SheetHeader>
           <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid items-center grid-cols-4 gap-4">
               <Label htmlFor="permalink" className="text-right">
                 Permalink
               </Label>
-              <Input id="permalink" className="col-span-3" onChange={(event) => setPermalink(event.target.value)} />
+              <Input
+                id="permalink"
+                className="col-span-3"
+                onChange={(event) => setPermalink(event.target.value)}
+              />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid items-center grid-cols-4 gap-4">
               <Label htmlFor="titulo" className="text-right">
                 Titulo
               </Label>
-              <Input id="titulo" className="col-span-3" onChange={(event) => setTitulo(event.target.value)} />
+              <Input
+                id="titulo"
+                className="col-span-3"
+                onChange={(event) => setTitulo(event.target.value)}
+              />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid items-center grid-cols-4 gap-4">
               <Label htmlFor="texto" className="text-right">
                 Descripcion
               </Label>
               <textarea
                 id="texto"
-                className="col-span-3 border rounded p-2 h-64 w-full"
+                className="w-full h-64 col-span-3 p-2 border rounded"
                 onChange={(event) => setTexto(event.target.value)}
               />
             </div>
           </div>
           <SheetFooter>
             <SheetClose asChild>
-              <Button type="submit" onClick={handleSaveNews}> Guardar Noticia </Button>
+              <Button type="submit" onClick={handleSaveNews}>
+                {' '}
+                Guardar Noticia{' '}
+              </Button>
             </SheetClose>
           </SheetFooter>
         </SheetContent>
