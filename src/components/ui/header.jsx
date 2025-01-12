@@ -1,8 +1,12 @@
+'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 
 export default function Component() {
+  const isAuthenticated = useIsAuthenticated();
+
   return (
     <div className="container px-4 mx-auto md:px-6 lg:px-8">
       <header className="flex items-center w-full h-20 px-4 shrink-0 md:px-6">
@@ -42,16 +46,20 @@ export default function Component() {
           >
             Pilotos
           </Link>
-          <Button
-            asChild
-            variant="outline"
-            className="px-2 py-1 text-xs justify-self-end"
-          >
-            <Link href="/auth/signin">Iniciar Sesión</Link>
-          </Button>
-          <Button asChild className="px-2 py-1 text-xs justify-self-end">
-            <Link href="/auth/signup">Regístrate</Link>
-          </Button>
+          {!isAuthenticated && (
+            <>
+              <Button
+                asChild
+                variant="outline"
+                className="px-2 py-1 text-xs justify-self-end"
+              >
+                <Link href="/auth/signin">Iniciar Sesión</Link>
+              </Button>
+              <Button asChild className="px-2 py-1 text-xs justify-self-end">
+                <Link href="/auth/signup">Regístrate</Link>
+              </Button>
+            </>
+          )}
         </div>
       </header>
     </div>
