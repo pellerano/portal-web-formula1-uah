@@ -34,7 +34,7 @@ export default function PanelUsersPage() {
   const [roleFilter, setRoleFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const { setBreadcrumbs } = useContext(Sidebar8Context);
-  const { users, roles, updateUser } = useUser();
+  const { users, roles, updateUser, deleteUser } = useUser();
   const currentUser = useAuthUser();
 
   const filter = (e) => {
@@ -83,10 +83,6 @@ export default function PanelUsersPage() {
     filterByStatus();
   }, [statusFilter]);
 
-  useEffect(() => {
-    console.log(users);
-  }, [users]);
-
   const renderTableRows = (usersToRender) => {
     return usersToRender.map((user, key) => {
       if (user.id !== currentUser?.id) {
@@ -113,7 +109,7 @@ export default function PanelUsersPage() {
             <TableCell>
               <div className="flex gap-2">
                 <EditUser user={user} roles={roles} updateUser={updateUser} />
-                <DeleteUser user={user} />
+                <DeleteUser user={user} deleteUser={deleteUser} />
               </div>
             </TableCell>
           </TableRow>

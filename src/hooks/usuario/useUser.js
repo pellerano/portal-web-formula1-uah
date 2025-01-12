@@ -44,7 +44,23 @@ const useUser = () => {
     }
   };
 
-  const deleteUser = (user) => {};
+  const deleteUser = async (user) => {
+    try {
+      const res = await FetchApiServiceInstance.delete(
+        `${url}/usuarios`,
+        user,
+        token
+      ).then(() => {
+        setUsers((curr) => {
+          const temp = [...curr].filter((x) => x.id !== user.id);
+          return temp;
+        });
+      });
+      return res;
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     getAllUsers();

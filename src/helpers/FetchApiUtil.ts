@@ -100,6 +100,31 @@ class FetchApiUtil {
     }
     return undefined;
   }
+  async delete(
+    path: string,
+    data: IModel,
+    token: string,
+    handleError?: (error: {}) => void
+  ): Promise<IModel | undefined> {
+    try {
+      let _result = await fetch(`${path}`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `${token != null ? token : ''}`,
+        },
+        method: 'DELETE',
+        body: JSON.stringify(data),
+      });
+      if (!_result) return undefined;
+      let _data = (await _result.json()) as IModel;
+      return _data;
+    } catch (err) {
+      handleError && handleError(err);
+      console.log('Error al retornar datos DB!');
+    }
+    return undefined;
+  }
 }
 
 const FetchApiServiceInstance = new FetchApiUtil();
