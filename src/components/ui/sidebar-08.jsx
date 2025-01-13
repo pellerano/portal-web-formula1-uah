@@ -90,6 +90,11 @@ export default function AppSidebar({ children }) {
         url: '/panel/circuits',
         icon: BookOpen,
       },
+      {
+        title: 'Gestión ERS',
+        url: '/panel/consumoERS',
+        icon: BookOpen,
+      },      
     ],
     navSecondary: [],
   };
