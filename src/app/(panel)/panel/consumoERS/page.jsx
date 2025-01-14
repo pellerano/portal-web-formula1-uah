@@ -1,13 +1,14 @@
-'use client';
-import React, { useEffect, useState } from "react";
+"use client";
 
-export default function ConsumoERSPage() {
+import React, { useState, useEffect } from "react";
+
+const ConsumoERSPage = () => {
   const [circuitos, setCircuitos] = useState([]);
   const [coches, setCoches] = useState([]);
   const [selectedCircuito, setSelectedCircuito] = useState("");
   const [selectedCoche, setSelectedCoche] = useState("");
-  const [modoConduccion, setModoConduccion] = useState("ahorrador");
-  const [margenConsumo, setMargenConsumo] = useState(10); // Valor entero
+  const [margenConsumo, setMargenConsumo] = useState(10); // Valor predeterminado
+  const [modoConduccion, setModoConduccion] = useState("ahorrador"); // Valor predeterminado
   const [consumoResult, setConsumoResult] = useState(null);
   const [ersResult, setERSResult] = useState(null);
 
@@ -45,7 +46,6 @@ export default function ConsumoERSPage() {
     fetchCoches();
   }, []);
 
-  // Handler para calcular ambos resultados
   const calcularResultados = async () => {
     if (!selectedCircuito || !selectedCoche) {
       alert("Por favor selecciona un circuito y un coche.");
@@ -55,35 +55,17 @@ export default function ConsumoERSPage() {
     try {
       // Cálculo de consumo
       const consumoResponse = await fetch(
-        `http://localhost:8087/consumo/calcular/${selectedCoche}/${encodeURIComponent(selectedCircuito)}/${margenConsumo}`
+          `http://localhost:8087/consumo/calcular/${selectedCoche}/${encodeURIComponent(selectedCircuito)}/${margenConsumo}`
       );
-      const consumoText = await consumoResponse.text();
-      console.log("Respuesta de consumo:", consumoText);
-
-      let consumoData;
-      try {
-        consumoData = JSON.parse(consumoText); // Intenta parsear el JSON
-      } catch (e) {
-        consumoData = consumoText; // Si no es JSON, mantenlo como texto
-      }
-      console.log("Respuesta procesada de consumo:", consumoData);
+      const consumoData = await consumoResponse.json();
 
       // Cálculo de ERS
       const ersResponse = await fetch(
-        `http://localhost:8087/ers/calcular?circuitoNombre=${encodeURIComponent(selectedCircuito)}&modoConduccion=${modoConduccion}`
+          `http://localhost:8087/ers/calcular?circuitoNombre=${encodeURIComponent(selectedCircuito)}&modoConduccion=${modoConduccion}`
       );
-      const ersText = await ersResponse.text();
-      console.log("Respuesta de ERS:", ersText);
+      const ersData = await ersResponse.json();
 
-      let ersData;
-      try {
-        ersData = JSON.parse(ersText); // Intenta parsear el JSON
-      } catch (e) {
-        ersData = ersText; // Si no es JSON, mantenlo como texto
-      }
-      console.log("Respuesta procesada de ERS:", ersData);
-
-      // Mostrar las respuestas procesadas
+      // Actualizar los estados con las respuestas
       setConsumoResult(consumoData);
       setERSResult(ersData);
     } catch (error) {
@@ -93,124 +75,121 @@ export default function ConsumoERSPage() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Simulación de Consumo y ERS</h1>
-      <div className="mb-4">
-        <label htmlFor="circuito" className="block text-sm font-medium text-gray-700">
-          Selecciona un circuito:
-        </label>
-        <select
-          id="circuito"
-          value={selectedCircuito}
-          onChange={(e) => setSelectedCircuito(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-        >
-          <option value="">-- Selecciona --</option>
-          {circuitos.map((circuito) => (
-            <option key={circuito.id} value={circuito.nombre}>
-              {circuito.nombre}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="mb-4">
-        <label htmlFor="coche" className="block text-sm font-medium text-gray-700">
-          Selecciona un coche:
-        </label>
-        <select
-          id="coche"
-          value={selectedCoche}
-          onChange={(e) => setSelectedCoche(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-        >
-          <option value="">-- Selecciona --</option>
-          {coches.map((coche) => (
-            <option key={coche.id} value={coche.codigo}>
-              {coche.nombre}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="mb-4">
-        <label htmlFor="modo" className="block text-sm font-medium text-gray-700">
-          Modo de conducción:
-        </label>
-        <select
-          id="modo"
-          value={modoConduccion}
-          onChange={(e) => setModoConduccion(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-        >
-          <option value="ahorrador">Ahorrador</option>
-          <option value="normal">Normal</option>
-          <option value="deportivo">Deportivo</option>
-        </select>
-      </div>
-      <div className="mb-4">
-        <label htmlFor="margen" className="block text-sm font-medium text-gray-700">
-          Margen de Consumo (%):
-        </label>
-        <input
-          id="margen"
-          type="number"
-          value={margenConsumo}
-          onChange={(e) => setMargenConsumo(parseInt(e.target.value))}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-        />
-      </div>
-      <button
-        onClick={calcularResultados}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        Calcular
-      </button>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Simulación de Consumo y ERS</h1>
 
-      {/* Resultados */}
-      {consumoResult && ersResult && (
-        <div className="mt-8">
-          <h2 className="text-xl font-bold mb-4">Resultados</h2>
-          <table className="table-auto w-full border-collapse border border-gray-400">
-            <thead>
-              <tr>
-                <th className="border border-gray-400 px-4 py-2">Resultado</th>
-                <th className="border border-gray-400 px-4 py-2">Detalle</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-gray-400 px-4 py-2">Coche:</td>
-                <td className="border border-gray-400 px-4 py-2">{selectedCoche && selectedCoche}</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-400 px-4 py-2">Circuito:</td>
-                <td className="border border-gray-400 px-4 py-2">{selectedCircuito && selectedCircuito}</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-400 px-4 py-2">Consumo por vuelta:</td>
-                <td className="border border-gray-400 px-4 py-2">{consumoResult && consumoResult.consumoPorVuelta ? `${consumoResult.consumoPorVuelta} L` : '-'}</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-400 px-4 py-2">Consumo total:</td>
-                <td className="border border-gray-400 px-4 py-2">{consumoResult && consumoResult.consumoTotal ? `${consumoResult.consumoTotal} L` : '-'}</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-400 px-4 py-2">Combustible óptimo (% margen):</td>
-                <td className="border border-gray-400 px-4 py-2">
-                  {consumoResult && consumoResult.combustibleOptimo ? `${consumoResult.combustibleOptimo} L` : '-'}
-                </td>
-              </tr>
-              <tr>
-                <td className="border border-gray-400 px-4 py-2">Energía por vuelta:</td>
-                <td className="border border-gray-400 px-4 py-2">{ersResult && ersResult.energiaPorVuelta ? `${ersResult.energiaPorVuelta}` : '-'}</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-400 px-4 py-2">Vueltas para carga completa:</td>
-                <td className="border border-gray-400 px-4 py-2">{ersResult && ersResult.vueltasParaCargaCompleta ? `${ersResult.vueltasParaCargaCompleta}` : '-'}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Selecciona un circuito:</label>
+          <select
+              value={selectedCircuito}
+              onChange={(e) => setSelectedCircuito(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          >
+            <option value="">-- Selecciona --</option>
+            {circuitos.map((circuito) => (
+                <option key={circuito.id} value={circuito.nombre}>
+                  {circuito.nombre}
+                </option>
+            ))}
+          </select>
         </div>
-      )}
-    </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Selecciona un coche:</label>
+          <select
+              value={selectedCoche}
+              onChange={(e) => setSelectedCoche(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          >
+            <option value="">-- Selecciona --</option>
+            {coches.map((coche) => (
+                <option key={coche.id} value={coche.codigo}>
+                  {coche.nombre}
+                </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Modo de conducción:</label>
+          <select
+              value={modoConduccion}
+              onChange={(e) => setModoConduccion(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          >
+            <option value="ahorrador">Ahorrador</option>
+            <option value="normal">Normal</option>
+            <option value="deportivo">Deportivo</option>
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Margen de Consumo (%):</label>
+          <input
+              type="number"
+              value={margenConsumo}
+              onChange={(e) => setMargenConsumo(Number(e.target.value))}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+        </div>
+
+        <button
+            onClick={calcularResultados}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Calcular
+        </button>
+
+        {/* Resultados */}
+        {consumoResult && (
+            <div className="mt-8">
+              <h2 className="text-xl font-bold mb-4">Resultado Consumo</h2>
+              <table className="table-auto border-collapse border border-gray-400 w-full text-left">
+                <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">Circuito</td>
+                  <td className="border border-gray-300 px-4 py-2">{consumoResult.circuito}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">Coche</td>
+                  <td className="border border-gray-300 px-4 py-2">{consumoResult.coche}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">Combustible Óptimo</td>
+                  <td className="border border-gray-300 px-4 py-2">{consumoResult.combustibleOptimo}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">Consumo Por Vuelta</td>
+                  <td className="border border-gray-300 px-4 py-2">{consumoResult.consumoPorVuelta}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">Consumo Total</td>
+                  <td className="border border-gray-300 px-4 py-2">{consumoResult.consumoTotal}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+        )}
+
+        {ersResult && (
+            <div className="mt-8">
+              <h2 className="text-xl font-bold mb-4">Resultado ERS</h2>
+              <table className="table-auto border-collapse border border-gray-400 w-full text-left">
+                <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">Energía Por Vuelta</td>
+                  <td className="border border-gray-300 px-4 py-2">{ersResult.energiaPorVuelta}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">Vueltas Para Carga Completa</td>
+                  <td className="border border-gray-300 px-4 py-2">{ersResult.vueltasParaCargaCompleta}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+        )}
+      </div>
   );
-}
+};
+
+export default ConsumoERSPage;
