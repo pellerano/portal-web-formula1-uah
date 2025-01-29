@@ -1,6 +1,6 @@
 'use client'
-import saveNewCircuit from '@/hooks/circuito/useNewCircuito';
-import { React, useContext, useEffect } from 'react';
+import updateCircuit from '@/hooks/circuito/updateCircuit';
+import { React, useContext, useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form'
 import {
     Form,
@@ -15,40 +15,42 @@ import { Input } from '@/components/ui/input'
 import { TypographyH3 } from "@/components/ui/typographyH3"
 import { Sidebar8Context } from '@/components/ui/sidebar-08';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import infoCircuito from "@/hooks/circuito/infoCircuito";
 
 
-export default function NewCircuits({
-    funcionCloseDialog, 
-    funcionOpenLoading,
-    funcionCloseLoading}) {
-  const { setBreadcrumbs } = useContext(Sidebar8Context);
-  const token = useAuthHeader();
-  const form = useForm({
-    defaultValues: {
-    nombre: '',
-		ciudad: '',
-		pais:'',
-		trazado: null,
-		numeroVueltas: 0,
-		longitud: 0,
-		curvasLentas: 0,
-		curvasMedia: 0,
-		curvasRapidas: 0
-		
-   }});
+export default function EditCircuits({
+    idCircuito,
+    setOpenDialogEditCircuit,
+    }) {
+
+    const form = useForm({
+        defaultValues: {
+              nombre: '',
+            ciudad: '',
+            pais:'',
+            trazado: null,
+            numeroVueltas: 0,
+            longitud: 0,
+            curvasLentas: 0,
+            curvasMedia: 0,
+            curvasRapidas: 0
+    }});
+    const [urlFotoB64, setUrlFotoB64] = useState('');
+    const dataCircuito = infoCircuito(idCircuito,form.setValue,setUrlFotoB64);
+    const inputFoto = useRef(null);
+    const { setBreadcrumbs } = useContext(Sidebar8Context);
+    const token = useAuthHeader();
    
   useEffect(() => {
     setBreadcrumbs(['Gestión de Circuitos']);
   }, []);
    
-  const handleSave = async (data) => {
-    funcionCloseDialog();  
-    funcionOpenLoading();
-  
-    const success = await saveNewCircuit(data,token);
+  const handleUpdate = async (data) => {
+    setOpenDialogEditCircuit(false);
+
+    const success = await updateCircuit(data,token,urlFotoB64);
 
     setTimeout(() => {
-      funcionCloseLoading();
       console.log("¡Ha pasado un segundo!");
       window.location.href="/panel/circuits";
     }, 1000); // 1000 ms = 1 segundo
@@ -57,14 +59,35 @@ export default function NewCircuits({
 
   return (
         <div className="container px-4 mx-auto md:px-6 lg:px-8">
-            <TypographyH3 text={'Nuevo Circuito'}/>
+            <TypographyH3 text={'Editar Circuito'}/>
             <hr />
             <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(handleSave)}
+                id={`formularioEditarCircuito${idCircuito}`}
+                onSubmit={form.handleSubmit(handleUpdate)}
                 className="space-y-8 py-5"
                 encType="multipart/form-data"
               >
+                <FormField
+                  control={form.control}
+                  name="id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input 
+                        	{...field} 
+	                        {...form.register("id", {  
+					         })}
+	                        className="bg-white"
+                            style={{ display: 'none' }}
+	                    />
+                      </FormControl>
+                      <FormMessage className="font-light text-red-600">
+                      {form.formState.errors.nombre?.message}
+		              </FormMessage>
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="nombre"
@@ -164,21 +187,28 @@ export default function NewCircuits({
                     </FormItem>
                   )}
                 />
+
+                {
+                  urlFotoB64 !== "" ? 
+                  <div className="space-y-2">
+                    <img className="w-32" src={urlFotoB64} />
+                  </div>: ""
+                }
                 <FormField
                   control={form.control}
                   name="trazado"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-black">
-                      Trazado
+                      Cambiar Trazado
                       </FormLabel>
                       <FormControl>
                         <Input 
+                            ref={inputFoto}
                         	type="file" 
                         	className="bg-white" 
                         	{...field} 
                         	{...form.register("trazado", {
-					            required: "Este campo es obligatorio",
 					         })}
                         	onChange={(e) =>{ field.onChange(e)}} 
                         />
@@ -188,6 +218,8 @@ export default function NewCircuits({
                     </FormItem>
                   )}
                 />
+
+
                 <FormField
                   control={form.control}
                   name="numeroVueltas"

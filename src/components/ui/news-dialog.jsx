@@ -12,7 +12,9 @@ export default function NewsDialog({ id,buttonTrigerProps,dialogTitle, descripti
 	}, [open]);
 	
 	const handleClose = () => {
+		setOpen(false);
 		setOpenDialog(false);
+
 	};
 	
 	const handleOpen = () => {
@@ -40,16 +42,15 @@ export default function NewsDialog({ id,buttonTrigerProps,dialogTitle, descripti
 		borderRadius: '8px',
 		zIndex: 1000,
 		overflow:'auto',
+		width: '70%',
 		height: '80%'
 	  };
 	return(
-		<div id={`${openDialog}`}>
-            <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
+		<div id={id}>
+            <Dialog.Root id={id} open={openDialog} onOpenChange={setOpenDialog}>
                 <Dialog.Trigger 
-                    {...buttonTrigerProps} 
                     onClick={handleOpen} 
-                    style={{ background: 'black', color: 'white', padding: '1%', borderRadius: '10%' }}
-                >
+					{...buttonTrigerProps}>
                     {buttonTrigerProps.value}
                 </Dialog.Trigger>
                 <Dialog.Overlay style={overlayStyle} />

@@ -1,7 +1,7 @@
 import { IModel } from "@/models/IModel"
 
 export interface ICircuito extends IModel {   
-    Id: number;
+    id: number;
 	nombre: string;
 	ciudad: string;
 	pais: string;

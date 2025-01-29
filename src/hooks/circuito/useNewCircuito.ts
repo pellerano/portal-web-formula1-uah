@@ -1,12 +1,12 @@
 import FetchApiServiceInstance from '@/helpers/FetchApiUtil';
 import UtilInstance from '@/helpers/Util';
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+
 //import { ICircuito } from '@/models/ICircuito'
 
-async function saveNewCircuit(data) {
-  const token = useAuthHeader();
+async function saveNewCircuit(data,token) {
   let dataurlb64: String = '';
   let response = 'OK';
+  let urlSave = `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/circuitos`;
   try {
     dataurlb64 = await UtilInstance.FileToUrlBase64(data.trazado[0]);
   } catch (e) {
@@ -14,21 +14,20 @@ async function saveNewCircuit(data) {
   }
 
   data.trazado = dataurlb64;
-  data = [data];
-  //console.log(data);
+  
   FetchApiServiceInstance.create(
-    `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/circuitos`,
+    urlSave,
     data,
     token,
     (err) => {
       console.log('error custom');
       response = '';
-    }
-  )
+    })
     .then((data) => {
       console.log('create -> ', data);
     })
     .catch((err) => {
+      console.log(err);
       response = '';
     })
     .finally(() => {});
