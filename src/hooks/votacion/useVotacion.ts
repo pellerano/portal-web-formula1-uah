@@ -1,27 +1,24 @@
 import FetchApiServiceInstance from '@/helpers/FetchApiUtil';
-import { IPiloto } from '@/models/IPiloto';
+import { ICircuito } from '@/models/ICircuito';
 import { useEffect, useState } from 'react';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 
-const usePiloto = () => {
-  const [listData, setListData] = useState<Array<IPiloto>>([]);
+const useVotacion = () => {
+  const [listDataVotacion, setListDataVotacion] = useState([]);
   const token = useAuthHeader();
 
   useEffect(() => {
     FetchApiServiceInstance.getAll(
-      `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/piloto`,
+      `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/votacion`,
       token,
       (err) => {
         console.log('error custom');
       }
     )
       .then((data) => {
-        let _data = data as Array<IPiloto>;
-        setListData([..._data]);
-
-        console.log("YYY");
-        console.log(_data);
-        console.log(listData);
+        console.log(data);
+        //let _data = data as Array<ICircuito>;
+        setListDataVotacion(data);
       })
       .catch((err) => {
         console.log('err: ', err);
@@ -29,12 +26,9 @@ const usePiloto = () => {
       .finally(() => {});
   }, []);
 
-  console.log("RRRR");
-  console.log(listData);
-
   return {
-    listData,
+    listDataVotacion,
   };
 };
 
-export default usePiloto;
+export default useVotacion;
