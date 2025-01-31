@@ -122,7 +122,7 @@ const usePilotoId = (eId: Number) => {
           })
           .catch((err) => {})
           .finally(() => {}));
-    window.location.href = '/pilotos';
+    window.location.href = '/panel/pilotos';
   };
 
   const getSigla = async () => {

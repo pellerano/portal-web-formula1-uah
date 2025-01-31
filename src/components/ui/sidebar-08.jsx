@@ -86,6 +86,11 @@ export default function AppSidebar({ children }) {
         icon: BookOpen,
       },
       {
+        title: 'Pilotos',
+        url: '/panel/pilotos',
+        icon: BookOpen,
+      },
+      {
         title: 'Gestión de circuitos',
         url: '/panel/circuits',
         icon: BookOpen,

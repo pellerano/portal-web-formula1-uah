@@ -9,7 +9,7 @@ const usePiloto = () => {
 
   useEffect(() => {
     FetchApiServiceInstance.getAll(
-      `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/piloto`,
+      `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/pilotos/equipo/0`,
       token,
       (err) => {
         console.log('error custom');
