@@ -2,7 +2,6 @@
 import { Sidebar8Context } from '@/components/ui/sidebar-08';
 import { React, useContext, useEffect, useState } from 'react';
 import useVotacion from "@/hooks/votacion/useVotacion";
-import usePiloto from "@/hooks/piloto/usePiloto";
 import { Button } from '@/components/ui/button';
 import { TrashIcon, UpdateIcon } from '@radix-ui/react-icons'; 
 import NewsDialog from '@/components/ui/news-dialog';
@@ -11,9 +10,8 @@ import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 
 export default function PanelPolls() {
   const { setBreadcrumbs } = useContext(Sidebar8Context);
-  const { listDataVotacion } = useVotacion();
+  const { listDataVotacion, listDataPilotos } = useVotacion();
   const [openDialog, setOpenDialog] = useState(false);
-  const {listData} = usePiloto();
 
   useEffect(() => {
     setBreadcrumbs(['Gestión de Votaciones']);
@@ -27,7 +25,7 @@ export default function PanelPolls() {
   const token = useAuthHeader();
 
   console.log("XXXX-hhhhhh2");
-  console.log(listData);
+  console.log(listDataPilotos);
   return (
 	  <div className="mt-5">
 	      <h1>Gestión de Votaciones</h1>
@@ -37,7 +35,7 @@ export default function PanelPolls() {
           dialogTitle=""
           description=""
           content={<NewVotacion 
-              listDataPilotos={listData}
+              listDataPilotos={listDataPilotos}
               setOpenDialog={setOpenDialog} 
             />}
           open={openDialog}

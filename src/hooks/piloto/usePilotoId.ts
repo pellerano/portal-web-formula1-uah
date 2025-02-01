@@ -40,10 +40,11 @@ const formSchema = z.object({
     .max(1),
 });
 
-const usePilotoId = (eId: Number) => {
+const usePilotoId = (eId: Number, eMSeg: Number) => {
   const inputFoto = useRef(null);
   const [urlFotoB64, setUrlFotoB64] = useState('');
   const token = useAuthHeader();
+  console.log("idddd -> ", eMSeg)
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -60,6 +61,7 @@ const usePilotoId = (eId: Number) => {
   });
 
   useEffect(() => {
+    console.log("fecha -> ", new Date().getMilliseconds())
     let statusDataId = 200;
     eId &&
       FetchApiServiceInstance.getById(
@@ -85,7 +87,7 @@ const usePilotoId = (eId: Number) => {
         })
         .catch((err) => {})
         .finally(() => {});
-  }, [eId]);
+  }, [eId, eMSeg]);
 
   const handleSave = async (e) => {
     let dataurlb64: String = '';

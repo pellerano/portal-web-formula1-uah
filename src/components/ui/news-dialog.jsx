@@ -43,7 +43,7 @@ export default function NewsDialog({ id,buttonTrigerProps,dialogTitle, descripti
 		zIndex: 1000,
 		overflow:'auto',
 		width: '70%',
-		height: '80%'
+		height: '85%'
 	  };
 	return(
 		<div id={id}>

@@ -7,6 +7,8 @@ const useVotacion = () => {
   const [listDataVotacion, setListDataVotacion] = useState([]);
   const token = useAuthHeader();
 
+  const [listDataPilotos, setListDataPilotos] = useState([]);
+
   useEffect(() => {
     FetchApiServiceInstance.getAll(
       `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/votacion`,
@@ -24,10 +26,26 @@ const useVotacion = () => {
         console.log('err: ', err);
       })
       .finally(() => {});
+
+      FetchApiServiceInstance.getAll(
+        `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/piloto`,
+        token,
+        (err) => {
+          console.log('error custom');
+        }
+      )
+        .then((data) => {
+          let _data = data
+          setListDataPilotos([..._data]);
+        })
+        .catch((err) => {
+          console.log('err: ', err);
+        })
+        .finally(() => {});
   }, []);
 
   return {
-    listDataVotacion,
+    listDataVotacion, listDataPilotos
   };
 };
 
