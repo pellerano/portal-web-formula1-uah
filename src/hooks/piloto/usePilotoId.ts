@@ -44,7 +44,6 @@ const usePilotoId = (eId: Number, eMSeg: Number) => {
   const inputFoto = useRef(null);
   const [urlFotoB64, setUrlFotoB64] = useState('');
   const token = useAuthHeader();
-  console.log("idddd -> ", eMSeg)
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -61,7 +60,6 @@ const usePilotoId = (eId: Number, eMSeg: Number) => {
   });
 
   useEffect(() => {
-    console.log("fecha -> ", new Date().getMilliseconds())
     let statusDataId = 200;
     eId &&
       FetchApiServiceInstance.getById(

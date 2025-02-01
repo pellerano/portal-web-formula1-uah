@@ -157,7 +157,6 @@ const Piloto = () => {
           content={<EditPiloto
                   dataId={idData}
                   eMSeg={new Date().getMilliseconds()} 
-                  setOpenDialogEditCircuit={setOpenDialogEdit}
                 />}
             open={openDialogEdit}
             setOpen={setOpenDialogEdit}

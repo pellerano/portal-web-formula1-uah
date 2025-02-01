@@ -67,8 +67,14 @@ const usePiloto = () => {
   }, []);
 
   const fnUpdateData = (id)=>{
+    console.log(openDialogEdit)
     setIdData(id);
-    setOpenDialogEdit(true);
+    if (openDialogEdit) {
+      setOpenDialogEdit(false)
+      setTimeout(() => {
+        setOpenDialogEdit(true)
+      })
+    }else setOpenDialogEdit(() => true)
     }
 
   return {
