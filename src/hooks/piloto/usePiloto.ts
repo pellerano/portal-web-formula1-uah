@@ -75,7 +75,27 @@ const usePiloto = () => {
         setOpenDialogEdit(true)
       })
     }else setOpenDialogEdit(() => true)
-    }
+  }
+
+  const fnDeleteData = async (id)=>{
+    const result = await FetchApiServiceInstance.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/piloto/${id}`,
+          {},
+          token,
+          (err) => {
+            console.log('error custom');
+          }
+        )
+        .then((data) => {
+          console.log('delete -> ', data);
+          setListData((curr) => {
+            const temp = [...curr].filter((x) => x.id !== id);
+            return temp;
+          });
+        })
+        .catch((err) => {})
+        .finally(() => {})
+  }
 
   return {
     listData,
@@ -85,7 +105,8 @@ const usePiloto = () => {
     statusFilter, setStatusFilter,
     open, setOpen,
     openLoading, setOpenLoading,
-    idData, fnUpdateData
+    idData, fnUpdateData,
+    fnDeleteData
   };
 };
 

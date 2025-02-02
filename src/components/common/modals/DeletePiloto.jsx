@@ -4,13 +4,13 @@ import { DialogClose, DialogTrigger } from '@/components/ui/dialog';
 import { Loader2, Trash } from 'lucide-react';
 import { useState } from 'react';
 
-const DeletePiloto = ({ data, deleteUser }) => {
+const DeletePiloto = ({ data, fnDelete }) => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
     try {
       setLoading(true);
-      await deleteUser(user).finally(() => {
+      await fnDelete(data.id).finally(() => {
         setLoading(false);
         document.querySelector('#dialog-close').click();
       });

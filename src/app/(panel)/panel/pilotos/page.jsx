@@ -38,7 +38,8 @@ const Piloto = () => {
     open, setOpen,
     openLoading, setOpenLoading,
     openDialogEdit, setOpenDialogEdit,
-    idData, fnUpdateData
+    idData, fnUpdateData,
+    fnDeleteData
   } = usePiloto()
 
   const renderTableRows = (usersToRender) => {
@@ -70,7 +71,7 @@ const Piloto = () => {
                 <Button variant='primary' onClick={()=>fnUpdateData(data.id)}>
                   <Edit />
                 </Button>
-                {/* <DeletePiloto data={data} deleteUser={() => {}} /> */}
+                <DeletePiloto data={data} fnDelete={fnDeleteData} />
               </div>
             </TableCell>
           </TableRow>
