@@ -91,6 +91,11 @@ export default function AppSidebar({ children }) {
         icon: BookOpen,
       },
       {
+        title: 'Responsables equipo',
+        url: '/panel/responsables',
+        icon: BookOpen,
+      },
+      {
         title: 'Gestión de circuitos',
         url: '/panel/circuits',
         icon: BookOpen,
