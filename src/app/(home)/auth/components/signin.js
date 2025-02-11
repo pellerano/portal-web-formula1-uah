@@ -57,6 +57,7 @@ export default function SignIn() {
         )
         .then((obj) => obj);
       if (res.status != 200) throw new Error(res.code);
+      const role = res.body.user.roles[0];
       signIn({
         auth: {
           token: res.body.accessToken,
@@ -66,10 +67,12 @@ export default function SignIn() {
           name: res.body.user.nombre,
           username: res.body.user.username,
           email: res.body.user.email,
-          role: res.body.user.roles[0],
+          role,
         },
       });
-      router.push('/panel');
+      const pushToUrl =
+        role.name === 'Administrador' || 'Equipo' ? '/panel' : '/';
+      router.push(pushToUrl);
     } catch (error) {
       console.error(error);
       setLoading(false);

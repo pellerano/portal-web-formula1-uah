@@ -3,9 +3,32 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import UserDropdown from '../common/user-dropdown';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from './avatar';
+import { ChevronsUpDown, LayoutPanelLeft, LogOut } from 'lucide-react';
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Component() {
+  const [user, setUser] = useState(null);
   const isAuthenticated = useIsAuthenticated();
+  const authUser = useAuthUser();
+  const signOut = useSignOut();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated && authUser) {
+      setUser(authUser);
+    }
+  }, [isAuthenticated, authUser]);
 
   return (
     <div className="container px-4 mx-auto md:px-6 lg:px-8">
@@ -17,7 +40,7 @@ export default function Component() {
             <p>Plataforma de Votación UAH</p>
           </div>
         </Link>
-        <div className="flex gap-2 ml-auto">
+        <div className="flex items-center gap-2 ml-auto">
           <Link
             href="/"
             className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
@@ -39,7 +62,21 @@ export default function Component() {
           >
             Votaciones
           </Link>
-          {!isAuthenticated && (
+          <Link
+            href="/calendar"
+            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+            prefetch={false}
+          >
+            Calendario
+          </Link>
+          <Link
+            href="/pilotos"
+            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+            prefetch={false}
+          >
+            Pilotos
+          </Link>
+          {!isAuthenticated ? (
             <>
               <Button
                 asChild
@@ -51,6 +88,48 @@ export default function Component() {
               <Button asChild className="px-2 py-1 text-xs justify-self-end">
                 <Link href="/auth/signup">Regístrate</Link>
               </Button>
+            </>
+          ) : (
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-2 p-2 border rounded-lg">
+                  <Avatar className="w-8 h-8 rounded-lg">
+                    <AvatarImage src={user?.avatar} alt={user?.name} />
+                    <AvatarFallback className="rounded-lg">
+                      {user?.name[0].toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="grid flex-1 text-sm leading-tight text-left">
+                    <span className="font-semibold truncate">{user?.name}</span>
+                    <span className="text-xs truncate">{user?.email}</span>
+                  </div>
+                  <ChevronsUpDown className="ml-auto size-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                  side="bottom"
+                  align="end"
+                  sideOffset={4}
+                >
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push('/panel');
+                    }}
+                  >
+                    <LayoutPanelLeft />
+                    Panel de Gestión
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      signOut();
+                      router.push('/auth/signin');
+                    }}
+                  >
+                    <LogOut />
+                    Cerrar Sesión
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           )}
         </div>

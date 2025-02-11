@@ -5,3 +5,11 @@ export function TypographyH1({ text }) {
     </h1>
   );
 }
+
+export function TypographyH2({ text }) {
+  return (
+    <h2 className="text-2xl font-extrabold tracking-tight scroll-m-20 lg:text-3xl">
+      {text}
+    </h2>
+  );
+}

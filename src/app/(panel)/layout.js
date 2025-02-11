@@ -20,6 +20,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/ui/sidebar-08';
 import Providers from '@/provider';
 import { Toaster } from '@/components/ui/toaster';
+import NextAuth from '@auth-kit/next';
 
 export default function Layout({ children }) {
   return (
@@ -28,10 +29,12 @@ export default function Layout({ children }) {
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <SidebarProvider>
-            <Toaster />
-            <AppSidebar>{children}</AppSidebar>
-          </SidebarProvider>
+          <NextAuth fallbackPath={'/auth/signin'}>
+            <SidebarProvider>
+              <Toaster />
+              <AppSidebar>{children}</AppSidebar>
+            </SidebarProvider>
+          </NextAuth>
         </body>
       </html>
     </Providers>

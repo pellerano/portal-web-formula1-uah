@@ -69,42 +69,50 @@ export default function AppSidebar({ children }) {
         url: '/panel/users',
         icon: SquareUserRound,
         isActive: true,
+        roleAccess: ['Administrador'],
       },
       {
         title: 'Gestión de Noticias',
         url: '/panel/news',
         icon: Newspaper,
+        roleAccess: ['Administrador'],
       },
       {
         title: 'Gestión de Votaciones',
         url: '/panel/polls',
         icon: BookOpen,
+        roleAccess: ['Administrador'],
       },
       {
         title: 'Mi equipo',
         url: '/panel/myteam',
         icon: BookOpen,
+        roleAccess: ['Equipo'],
       },
       {
         title: 'Pilotos',
         url: '/panel/pilotos',
         icon: BookOpen,
+        roleAccess: ['Equipo'],
       },
       {
         title: 'Responsables equipo',
         url: '/panel/responsables',
         icon: BookOpen,
+        roleAccess: ['Equipo'],
       },
       {
         title: 'Gestión de circuitos',
         url: '/panel/circuits',
         icon: BookOpen,
+        roleAccess: ['Equipo'],
       },
       {
         title: 'Gestión ERS',
         url: '/panel/consumoERS',
         icon: BookOpen,
-      },      
+        roleAccess: ['Equipo'],
+      },
     ],
     navSecondary: [],
   };
@@ -116,7 +124,7 @@ export default function AppSidebar({ children }) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild>
-                <a href="#">
+                <a href="/">
                   <div className="flex items-center justify-center rounded-lg aspect-square size-8 bg-sidebar-primary text-sidebar-primary-foreground">
                     <Command className="size-4" />
                   </div>
@@ -133,45 +141,48 @@ export default function AppSidebar({ children }) {
           <SidebarGroup>
             <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
             <SidebarMenu>
-              {data.navMain.map((item) => (
-                <Collapsible
-                  key={item.title}
-                  asChild
-                  defaultOpen={item.isActive}
-                >
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip={item.title}>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                    {item.items?.length ? (
-                      <>
-                        <CollapsibleTrigger asChild>
-                          <SidebarMenuAction className="data-[state=open]:rotate-90">
-                            <ChevronRight />
-                            <span className="sr-only">Toggle</span>
-                          </SidebarMenuAction>
-                        </CollapsibleTrigger>
-                        <CollapsibleContent>
-                          <SidebarMenuSub>
-                            {item.items?.map((subItem) => (
-                              <SidebarMenuSubItem key={subItem.title}>
-                                <SidebarMenuSubButton asChild>
-                                  <a href={subItem.url}>
-                                    <span>{subItem.title}</span>
-                                  </a>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
-                      </>
-                    ) : null}
-                  </SidebarMenuItem>
-                </Collapsible>
-              ))}
+              {data.navMain.map((item) => {
+                if (item.roleAccess.includes(user.role.name))
+                  return (
+                    <Collapsible
+                      key={item.title}
+                      asChild
+                      defaultOpen={item.isActive}
+                    >
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild tooltip={item.title}>
+                          <a href={item.url}>
+                            <item.icon />
+                            <span>{item.title}</span>
+                          </a>
+                        </SidebarMenuButton>
+                        {item.items?.length ? (
+                          <>
+                            <CollapsibleTrigger asChild>
+                              <SidebarMenuAction className="data-[state=open]:rotate-90">
+                                <ChevronRight />
+                                <span className="sr-only">Toggle</span>
+                              </SidebarMenuAction>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent>
+                              <SidebarMenuSub>
+                                {item.items?.map((subItem) => (
+                                  <SidebarMenuSubItem key={subItem.title}>
+                                    <SidebarMenuSubButton asChild>
+                                      <a href={subItem.url}>
+                                        <span>{subItem.title}</span>
+                                      </a>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                ))}
+                              </SidebarMenuSub>
+                            </CollapsibleContent>
+                          </>
+                        ) : null}
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  );
+              })}
             </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup className="mt-auto">
