@@ -2,7 +2,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -12,17 +11,13 @@ export default function NewsCard({ title, description, href }) {
   return (
     <Card>
       <CardHeader>
-        <Link href={href}>
-          <CardTitle>{title}</CardTitle>
-        </Link>
+        <CardTitle>
+          <Link href={href} style={{ textDecoration: 'none', color: 'inherit' }}>
+            {title}
+          </Link>
+        </CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      {/* <CardContent>
-        <p>Card Content</p>
-      </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter> */}
     </Card>
   );
 }
