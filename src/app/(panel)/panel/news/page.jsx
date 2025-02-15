@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sheet';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import useNews from '@/hooks/news/useNews';
 
 export default function NewsListPage() {
   const { setBreadcrumbs } = useContext(Sidebar8Context);
@@ -22,38 +23,15 @@ export default function NewsListPage() {
     setBreadcrumbs(['Gestion de Noticias']);
   }, []);
 
-  const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { news, loading, error, getAllNews, createNews } = useNews();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [titulo, setTitulo] = useState('');
   const [texto, setTexto] = useState('');
   const [permalink, setPermalink] = useState('');
-  const [imagen, setImagen] = useState('');
-  const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/noticias`;
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(apiUrl);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setNews(data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const [imagen, setImagen] = useState('');
 
   const handleSaveNews = async () => {
-    // if (!permalink || !titulo || !texto) {
-    //   alert('Todos los campos son requeridos');
-    //   return;
-    // }
-    const createNews = {
+    const newNewsItem = {
       permalink,
       titulo,
       imagen: null,
@@ -61,31 +39,15 @@ export default function NewsListPage() {
       date: new Date().toISOString(),
     };
 
-    console.log(JSON.stringify(createNews));
-
     try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(createNews),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
+      await createNews(newNewsItem);
       setIsSheetOpen(false);
-      fetchData();
-    } catch (error) {
-      console.error('Error al guardar los la noticia:', error);
+      await getAllNews();
+    } catch (err) {
+      console.error('Error al guardar la noticia:', err);
+      alert('Error al guardar la noticia');
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   if (loading) {
     return <p>Cargando datos...</p>;
@@ -104,7 +66,7 @@ export default function NewsListPage() {
         {news.length > 0 ? (
           <NewsTable data={news} />
         ) : (
-          <p>No movies available</p>
+          <p>No news available</p>
         )}
       </div>
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
