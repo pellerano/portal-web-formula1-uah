@@ -49,6 +49,7 @@ export default function SignIn() {
             'Content-Type': 'application/json',
           },
           method: 'POST',
+          mode: 'no-cors',
           body: JSON.stringify(values),
         }
       )
