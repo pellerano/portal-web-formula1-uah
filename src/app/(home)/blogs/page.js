@@ -5,7 +5,7 @@ import { TypographyH1 } from '@/components/ui/typography';
 import useNews from '@/hooks/news/useNews';
 import moment from 'moment';
 
-export default function Blogs() {  // O const NewsList = () => {
+export default function Blogs() {
   const { news, loading, error } = useNews();
 
   if (loading) {
@@ -25,7 +25,7 @@ export default function Blogs() {  // O const NewsList = () => {
             <NewsCard
               title={newsItem.titulo}
               href={`/blogs/${newsItem.id}`}
-              description={moment(newsItem.date).format('DD MMM YYYY')} // Asumiendo createdAt
+              description={moment(newsItem.date).format('DD MMM YYYY')}
             />
           </div>
         ))}

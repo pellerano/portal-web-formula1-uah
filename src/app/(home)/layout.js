@@ -3,6 +3,7 @@ import '../globals.css';
 
 import Header from '@/components/ui/header';
 import Providers from '@/provider';
+import { Toaster } from '@/components/ui/toaster';
 
 const geistSans = localFont({
   src: '../fonts/GeistVF.woff',
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
           <Header />
           <div className="grid grid-rows-[20px_1fr_20px]  min-h-screen pb-20  font-[family-name:var(--font-geist-sans)]">
             <main className="flex flex-col items-center row-start-2 gap-8 sm:items-start">
+              <Toaster />
               {children}
             </main>
           </div>
