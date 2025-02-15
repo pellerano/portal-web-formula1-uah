@@ -37,8 +37,6 @@ export default function PanelUsersPage() {
   const { users, roles, updateUser, deleteUser } = useUser();
   const currentUser = useAuthUser();
 
-console.log("Easter egg")
-
   const filter = (e) => {
     const value = e.target.value.toLowerCase();
     const data = filteredUsers.length ? filteredUsers : users;
