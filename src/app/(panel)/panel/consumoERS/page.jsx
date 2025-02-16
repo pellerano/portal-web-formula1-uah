@@ -16,7 +16,7 @@ const ConsumoERSPage = () => {
   useEffect(() => {
     const fetchCircuitos = async () => {
       try {
-        const response = await fetch(`https://${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/circuitos`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/circuitos`);
         if (response.ok) {
           const data = await response.json();
           setCircuitos(data);
