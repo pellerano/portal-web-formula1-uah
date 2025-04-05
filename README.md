@@ -1,6 +1,6 @@
 ## Primeros Pasos
 
-Este proyecto utiliza Yarn como gestor de paquetes. Si aún no lo tienes instalado, puedes hacerlo ejecutando el siguiente comando:
+Este proyecto utiliza Yarn como gestor de paquetes. Si aún no tienes instalado, puedes hacerlo ejecutando el siguiente comando:
 
 ```bash
 npm install -g yarn
