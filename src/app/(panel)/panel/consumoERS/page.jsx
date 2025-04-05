@@ -16,7 +16,7 @@ const ConsumoERSPage = () => {
   useEffect(() => {
     const fetchCircuitos = async () => {
       try {
-        const response = await fetch("http://localhost:8087/portalWebFormula1/circuitos");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/circuitos`);
         if (response.ok) {
           const data = await response.json();
           setCircuitos(data);
@@ -30,7 +30,7 @@ const ConsumoERSPage = () => {
 
     const fetchCoches = async () => {
       try {
-        const response = await fetch("http://localhost:8087/portalWebFormula1/coches");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/portalWebFormula1/coches`);
         if (response.ok) {
           const data = await response.json();
           setCoches(data);
@@ -55,13 +55,13 @@ const ConsumoERSPage = () => {
     try {
       // Cálculo de consumo
       const consumoResponse = await fetch(
-          `http://localhost:8087/consumo/calcular/${selectedCoche}/${encodeURIComponent(selectedCircuito)}/${margenConsumo}`
+          `${process.env.NEXT_PUBLIC_API_URL}/consumo/calcular/${selectedCoche}/${encodeURIComponent(selectedCircuito)}/${margenConsumo}`
       );
       const consumoData = await consumoResponse.json();
 
       // Cálculo de ERS
       const ersResponse = await fetch(
-          `http://localhost:8087/ers/calcular?circuitoNombre=${encodeURIComponent(selectedCircuito)}&modoConduccion=${modoConduccion}`
+          `${process.env.NEXT_PUBLIC_API_URL}/ers/calcular?circuitoNombre=${encodeURIComponent(selectedCircuito)}&modoConduccion=${modoConduccion}`
       );
       const ersData = await ersResponse.json();
 
